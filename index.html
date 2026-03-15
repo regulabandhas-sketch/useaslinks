@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USEAS Cloud | Secure Upload</title>
+    <title>USEAS | Professional File Host</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
         <div class="upload-card">
-            <div class="header">
-                <h1>Secure Cloud Storage</h1>
-                <p>Upload files, images, or apps permanently</p>
+            <h1>USEAS<span>CLOUD</span></h1>
+            <p class="subtitle">Secure, permanent file storage</p>
+
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <div class="icon">☁️</div>
+                <p>Click or drag file to upload</p>
+                <input type="file" id="fileInput" hidden>
             </div>
 
-            <div class="drop-zone" id="dropZone">
-                <span class="drop-zone__prompt">Drop file here or click to upload</span>
-                <input type="file" name="myFile" id="fileInput" class="drop-zone__input">
+            <button class="main-btn" onclick="uploadFile()">Generate Link</button>
+
+            <div id="statusArea" class="hidden">
+                <div class="spinner"></div>
+                <p>Uploading to permanent storage...</p>
             </div>
 
-            <button class="upload-btn" onclick="uploadFile()">Generate Permanent Link</button>
-
-            <div id="statusArea">
-                <div id="loader" class="hidden">Uploading...</div>
-                <div id="result" class="result-box hidden">
-                    <p>File Link:</p>
+            <div id="resultArea" class="hidden">
+                <p class="success-label">Success! Your link is ready:</p>
+                <div class="link-group">
                     <input type="text" id="urlDisplay" readonly>
-                    <button onclick="copyLink()" class="copy-btn">Copy</button>
+                    <button onclick="copyLink()">Copy</button>
                 </div>
             </div>
         </div>
