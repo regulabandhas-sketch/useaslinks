@@ -1,35 +1,106 @@
-body{
-background:#0b0620;
-color:white;
-font-family:Arial;
-text-align:center;
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, sans-serif;
 }
 
-#dropzone{
-border:2px dashed #00e5ff;
-padding:40px;
-width:400px;
-margin:auto;
-margin-top:20px;
+body {
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f8fafc;
 }
 
-.progress{
-width:400px;
-height:20px;
-background:#333;
-margin:auto;
-margin-top:10px;
+/* Glassmorphism Card */
+.upload-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
-#bar{
-height:20px;
-width:0%;
-background:#00e5ff;
+.header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    background: linear-gradient(to right, #60a5fa, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.file{
-background:#140a30;
-margin:10px;
-padding:10px;
-border-radius:5px;
+.header p {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+
+/* Drag and Drop Zone */
+.drop-zone {
+    height: 150px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+.drop-zone:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #3b82f6;
+}
+
+.drop-zone__input {
+    display: none;
+}
+
+/* Buttons */
+.upload-btn {
+    width: 100%;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* Result Area */
+.result-box {
+    margin-top: 25px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+#urlDisplay {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #60a5fa;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.hidden {
+    display: none;
 }
