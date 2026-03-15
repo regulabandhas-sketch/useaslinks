@@ -10,9 +10,19 @@
 
 <h2>Secure File Hosting</h2>
 
+<div id="loginBox">
+<input id="user" placeholder="username">
+<input id="pass" type="password" placeholder="password">
+<button onclick="login()">Login</button>
+</div>
+
+<div id="app" style="display:none">
+
+<div id="dropzone">Drag & Drop Files Here</div>
+
 <input type="file" id="file">
 
-<button onclick="uploadFile()">Upload</button>
+<button onclick="upload()">Upload</button>
 
 <div class="progress">
 <div id="bar"></div>
@@ -23,6 +33,8 @@
 
 <h3>Files</h3>
 <div id="files"></div>
+
+</div>
 
 <script src="app.js"></script>
 
