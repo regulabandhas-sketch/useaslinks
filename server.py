@@ -1,58 +1,48 @@
 from flask import Flask,request,jsonify
-import base64,requests,json,random,string
+import os,json
 
 app=Flask(__name__)
 
-TOKEN="YOUR_GITHUB_TOKEN"
-REPO="USERNAME/REPO"
+UPLOAD="uploads"
 
-def short_id():
+if not os.path.exists(UPLOAD):
+ os.mkdir(UPLOAD)
 
- return ''.join(random.choices(string.ascii_letters+string.digits,k=6))
+DB="files.json"
+
+if not os.path.exists(DB):
+ open(DB,"w").write('{"files":[]}')
 
 @app.route("/upload",methods=["POST"])
 def upload():
 
  file=request.files["file"]
 
- # simple virus safety
- if file.filename.endswith(".exe"):
-  return jsonify({"error":"blocked file type"})
+ path=os.path.join(UPLOAD,file.filename)
 
- name=file.filename
+ file.save(path)
 
- content=base64.b64encode(file.read()).decode()
+ url="/file/"+file.filename
 
- url=f"https://api.github.com/repos/{REPO}/contents/uploads/{name}"
-
- headers={"Authorization":f"token {TOKEN}"}
-
- data={"message":"upload","content":content}
-
- requests.put(url,json=data,headers=headers)
-
- link=f"https://raw.githubusercontent.com/{REPO}/main/uploads/{name}"
-
- short=short_id()
-
- with open("files.json") as f:
-  db=json.load(f)
+ db=json.load(open(DB))
 
  db["files"].append({
-  "name":name,
-  "url":link,
-  "short":short
+  "name":file.filename,
+  "url":url
  })
 
- with open("files.json","w") as f:
-  json.dump(db,f,indent=2)
+ json.dump(db,open(DB,"w"),indent=2)
 
- return jsonify({"url":link,"short":short})
+ return {"ok":True}
 
 @app.route("/files")
 def files():
 
- with open("files.json") as f:
-  return jsonify(json.load(f))
+ return json.load(open(DB))
 
-app.run(port=5000)
+@app.route("/file/<name>")
+def file(name):
+
+ return app.send_static_file("uploads/"+name)
+
+app.run()
