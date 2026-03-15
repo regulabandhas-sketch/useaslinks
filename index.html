@@ -1,42 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Secure File Hosting</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USEAS Cloud | Secure Upload</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h2>Secure File Hosting</h2>
+    <div class="container">
+        <div class="upload-card">
+            <div class="header">
+                <h1>Secure Cloud Storage</h1>
+                <p>Upload files, images, or apps permanently</p>
+            </div>
 
-<div id="loginBox">
-<input id="user" placeholder="username">
-<input id="pass" type="password" placeholder="password">
-<button onclick="login()">Login</button>
-</div>
+            <div class="drop-zone" id="dropZone">
+                <span class="drop-zone__prompt">Drop file here or click to upload</span>
+                <input type="file" name="myFile" id="fileInput" class="drop-zone__input">
+            </div>
 
-<div id="app" style="display:none">
+            <button class="upload-btn" onclick="uploadFile()">Generate Permanent Link</button>
 
-<div id="dropzone">Drag & Drop Files Here</div>
+            <div id="statusArea">
+                <div id="loader" class="hidden">Uploading...</div>
+                <div id="result" class="result-box hidden">
+                    <p>File Link:</p>
+                    <input type="text" id="urlDisplay" readonly>
+                    <button onclick="copyLink()" class="copy-btn">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<input type="file" id="file">
-
-<button onclick="upload()">Upload</button>
-
-<div class="progress">
-<div id="bar"></div>
-</div>
-
-<h3>Preview</h3>
-<div id="preview"></div>
-
-<h3>Files</h3>
-<div id="files"></div>
-
-</div>
-
-<script src="app.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
