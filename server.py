@@ -1,48 +1,52 @@
-from flask import Flask,request,jsonify
-import os,json
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import requests
+import base64
+import os
 
-app=Flask(__name__)
+app = Flask(__name__)
+CORS(app)
 
-UPLOAD="uploads"
+# Configuration - Keep these secure!
+GITHUB_TOKEN = "your_github_personal_access_token"
+REPO_OWNER = "your_username"
+REPO_NAME = "your_storage_repo"
+BRANCH = "main"
 
-if not os.path.exists(UPLOAD):
- os.mkdir(UPLOAD)
+@app.route('/upload', methods=['POST'])
+def upload_to_github():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file provided"}), 400
+    
+    file = request.files['file']
+    file_content = file.read()
+    
+    # Encode file to Base64 for GitHub API
+    encoded_content = base64.b64encode(file_content).decode('utf-8')
+    
+    # Create a unique path for the file
+    file_path = f"uploads/{file.filename}"
+    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+    
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+    
+    data = {
+        "message": f"Upload {file.filename}",
+        "content": encoded_content,
+        "branch": BRANCH
+    }
 
-DB="files.json"
+    response = requests.put(url, json=data, headers=headers)
+    
+    if response.status_code in [200, 201]:
+        # Generate the permanent raw link
+        raw_url = f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/{BRANCH}/{file_path}"
+        return jsonify({"link": raw_url, "status": "success"})
+    else:
+        return jsonify({"error": response.json()}), response.status_code
 
-if not os.path.exists(DB):
- open(DB,"w").write('{"files":[]}')
-
-@app.route("/upload",methods=["POST"])
-def upload():
-
- file=request.files["file"]
-
- path=os.path.join(UPLOAD,file.filename)
-
- file.save(path)
-
- url="/file/"+file.filename
-
- db=json.load(open(DB))
-
- db["files"].append({
-  "name":file.filename,
-  "url":url
- })
-
- json.dump(db,open(DB,"w"),indent=2)
-
- return {"ok":True}
-
-@app.route("/files")
-def files():
-
- return json.load(open(DB))
-
-@app.route("/file/<name>")
-def file(name):
-
- return app.send_static_file("uploads/"+name)
-
-app.run()
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
